@@ -1,4 +1,4 @@
-from typing import List, Tuple, Any
+from typing import List, Tuple
 
 
 def day2() -> Tuple[int, int]:
