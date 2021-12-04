@@ -58,7 +58,8 @@ def day4(file_name: str) -> Tuple:
     return part1(bingo_numbers, boards)[0], part2(bingo_numbers, boards)
 
 
-print("Part 1 %d, Part2: %d" % day4("puzzle.txt"))
+if __name__ == "__main__":
+    print("Part 1 %d, Part2: %d" % day4("puzzle.txt"))
 
 """
 --- Day 4: Giant Squid ---
