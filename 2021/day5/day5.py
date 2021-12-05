@@ -1,10 +1,12 @@
 import re
 from typing import List
 
+import numpy
+
 
 def read_file(file_name: str) -> List:
     with open(file_name, "r") as file:
-        return [[tuple(map(lambda x: int(x), re.split(',', points))) for points in row.split("->")]
+        return [[tuple(map(lambda x: int(x), re.split(',', points))) for points in row.split(" -> ")]
                 for row in file.read().strip().split("\n")]
 
 
@@ -34,6 +36,11 @@ def part1(lines: List):
         else:
             x, y = line[0]
             while True:
+                plane[x][y] += 1
+
+                if x == x2 and y == y2:
+                    break
+
                 if x <= x2:
                     x += 1
                 elif x >= x2:
@@ -43,12 +50,6 @@ def part1(lines: List):
                     y += 1
                 elif y >= y2:
                     y -= 1
-
-                plane[x][y] += 1
-                # print(line, x, y, x1, y1, x2, y2)
-
-                if x == x2 and y == y2:
-                    break
 
     return sum(elem > 1 for row in plane for elem in row)
 
