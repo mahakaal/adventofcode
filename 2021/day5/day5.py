@@ -1,8 +1,6 @@
 import re
 from typing import List
 
-import numpy
-
 
 def read_file(file_name: str) -> List:
     with open(file_name, "r") as file:
@@ -34,22 +32,25 @@ def part1(lines: List):
             for x in range(from_x, to_x):
                 plane[x][y1] += 1
         else:
-            x, y = line[0]
-            while True:
+            for i in range(abs(x2 - x1)):
+                x, y = x1 + i if x1 < x2 else x1 - i, y1 + i if y1 < y2 else y1 - i
                 plane[x][y] += 1
 
-                if x == x2 and y == y2:
-                    break
-
-                if x <= x2:
-                    x += 1
-                elif x >= x2:
-                    x -= 1
-
-                if y <= y2:
-                    y += 1
-                elif y >= y2:
-                    y -= 1
+            # while True:
+            #     plane[x][y] += 1
+            #
+            #     if x == x2 and y == y2:
+            #         break
+            #
+            #     if x <= x2:
+            #         x += 1
+            #     elif x >= x2:
+            #         x -= 1
+            #
+            #     if y <= y2:
+            #         y += 1
+            #     elif y >= y2:
+            #         y -= 1
 
     return sum(elem > 1 for row in plane for elem in row)
 
