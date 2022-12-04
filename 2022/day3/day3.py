@@ -68,7 +68,6 @@ Your puzzle answer was 2515.
 Both parts of this puzzle are complete! They provide two gold stars: **
 """
 
-
 import string
 
 
@@ -80,27 +79,26 @@ def read_file(filename: str) -> [[str]]:
 def day3() -> (int, int):
     file = 'puzzle.txt'
 
-    def part1(data: [str]) -> int:
+    def get_priorities() -> {}:
         lowercase = list(zip(list(string.ascii_lowercase), range(1, 27)))
         uppercase = list(zip(list(string.ascii_uppercase), range(27, 53)))
 
-        priorities = {i[0]: i[1] for i in lowercase + uppercase}
+        return {i[0]: i[1] for i in lowercase + uppercase}
+
+    def part1(data: [str]) -> int:
+        priorities = get_priorities()
         total = 0
 
         for line in data:
-            half = int(len(line)/2)
+            half = len(line) // 2
             first_half, second_half = [*line[: half]], [*line[half:]]
             intersection = list(set(first_half).intersection(set(second_half)))
             total += sum(priorities[i] for i in intersection)
 
         return total
 
-
     def part2(data: [str]) -> int:
-        lowercase = list(zip(list(string.ascii_lowercase), range(1, 27)))
-        uppercase = list(zip(list(string.ascii_uppercase), range(27, 53)))
-
-        priorities = {i[0]: i[1] for i in lowercase + uppercase}
+        priorities = get_priorities()
         total = 0
         for i in range(0, len(data), 3):
             a, b, c = set(data[i]), set(data[i + 1]), set(data[i + 2])
