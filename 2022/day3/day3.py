@@ -71,7 +71,7 @@ Both parts of this puzzle are complete! They provide two gold stars: **
 import string
 
 
-def read_file(filename: str) -> [[str]]:
+def read_file(filename: str) -> [str]:
     with open(filename, 'r') as file:
         return [line for line in file.read().strip().split('\n')]
 
