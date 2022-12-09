@@ -16,9 +16,9 @@ class Node:
         if 'file' == child.get_type():
             self.value += child.get_value()
 
-        parent = self.get_parent()
-        if parent:
-            parent.set_value(parent.get_value() + child.get_value())
+            parent = self.get_parent()
+            if parent:
+                parent.set_value(parent.get_value() + child.get_value())
 
         self.children.append(child)
 
