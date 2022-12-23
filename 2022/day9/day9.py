@@ -11,54 +11,71 @@ def to_list(s: str) -> [str, int]:
 with open(filename, 'r') as file:
     data = [to_list(line) for line in file.read().strip().split('\n')]
 
-start = H = T = [0, 0]
-visited = {'P0,0': 1}
+# start = H = T = [0, 0]
+# rope = [H] + [T]
 
-for line in data:
-    d, step = line
-    i, j = H
 
-    match d:
-        case 'D':
-            H = [i - step, j]
-        case 'L':
-            H = [i, j - step]
-        case 'R':
-            H = [i, j + step]
-        case 'U':
-            H = [i + step, j]
-        case _:
-            break
+def solve(rope: [[int]], input_data: [str]) -> [{}]:
+    visited = [{'P0,0': 1} for _ in range(len(rope) - 1)]
 
-    for _ in range(step):
-        distance = round(sqrt((H[0] - T[0])**2 + (H[1] - T[1])**2))
+    for line in input_data:
+        d, step = line
+        i, j = rope[0]
 
-        if distance <= 1:
-            continue
+        match d:
+            case 'D':
+                rope[0] = [i - step, j]
+            case 'L':
+                rope[0] = [i, j - step]
+            case 'R':
+                rope[0] = [i, j + step]
+            case 'U':
+                rope[0] = [i + step, j]
+            case _:
+                break
 
-        if H[0] == T[0]:    # Same row, different column
-            if H[1] > T[1]:
-                T[1] += 1
-            elif H[1] < T[1]:
-                T[1] -= 1
-        elif H[1] == T[1]:    # Same column, different row
-            if H[0] > T[0]:
-                T[0] += 1
-            elif H[0] < T[0]:
-                T[0] -= 1
-        elif distance > 1:    # Different coordinates, calculate diagonal direction if diff > 1
-            if H[0] > T[0] and H[1] > T[1]:
-                T = [T[0] + 1, T[1] + 1]
-            elif H[0] < T[0] and H[1] < T[1]:
-                T = [T[0] - 1, T[1] - 1]
-            elif H[0] > T[0] and H[1] < T[1]:
-                T = [T[0] + 1, T[1] - 1]
-            elif H[0] < T[0] and H[1] > T[1]:
-                T = [T[0] - 1, T[1] + 1]
+        for k in range(1, len(rope)):
+            for _ in range(step):
+                distance = round(sqrt((rope[k - 1][0] - rope[k][0])**2 + (rope[k - 1][1] - rope[k][1])**2))
 
-        n = f'P%d,%d' % (T[0], T[1])
-        t = visited.setdefault(n, 1)
-        if t > 1:
-            visited[n] += 1
+                if distance <= 1:
+                    break
 
-print(f"Part 1: %d" % len(visited))
+                if rope[k - 1][0] == rope[k][0]:    # Same row, different column
+                    if rope[k - 1][1] > rope[k][1]:
+                        rope[k][1] += 1
+                    elif rope[k - 1][1] < rope[k][1]:
+                        rope[k][1] -= 1
+                elif rope[k - 1][1] == rope[k][1]:    # Same column, different row
+                    if rope[k - 1][0] > rope[k][0]:
+                        rope[k][0] += 1
+                    elif rope[k - 1][0] < rope[k][0]:
+                        rope[k][0] -= 1
+                elif distance > 1:    # Different coordinates, calculate diagonal direction if diff > 1
+                    if rope[k - 1][0] > rope[k][0] and rope[k - 1][1] > rope[k][1]:
+                        rope[k] = [rope[k][0] + 1, rope[k][1] + 1]
+                    elif rope[k - 1][0] < rope[k][0] and rope[k - 1][1] < rope[k][1]:
+                        rope[k] = [rope[k][0] - 1, rope[k][1] - 1]
+                    elif rope[k - 1][0] > rope[k][0] and rope[k - 1][1] < rope[k][1]:
+                        rope[k] = [rope[k][0] + 1, rope[k][1] - 1]
+                    elif rope[k - 1][0] < rope[k][0] and rope[k - 1][1] > rope[k][1]:
+                        rope[k] = [rope[k][0] - 1, rope[k][1] + 1]
+
+                n = f'P%d,%d' % (rope[k][0], rope[k][1])
+                temp = visited[k - 1].setdefault(n, 1)
+                if temp > 1:
+                    visited[k - 1][n] += 1
+
+    return visited
+
+
+def part1(input_data: [str]) -> int:
+    return len(solve([[0, 0], [0, 0]], input_data)[0])
+
+
+def part2(input_data: [str]) -> int:
+    return len(solve([[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]], input_data)[8])
+
+
+print(f"Part 1: %d" % part1(data))
+print(f"Part 2: %d" % part2(data))
