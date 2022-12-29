@@ -2,6 +2,10 @@ import copy
 
 filename = 'input.txt'
 monkeys = []
+
+"""
+We'll do GCD for Chinese Remainder Theorem
+"""
 MONKEY_DIVISOR_CONSTANT = 1
 
 with open(filename, 'r') as file:
@@ -16,7 +20,7 @@ with open(filename, 'r') as file:
                 case ['Operation:', _, _, _, op, n]:
                     monkey['operation'] = [op, n]
                 case ['Test:', _, _, n]:
-                    MONKEY_DIVISOR_CONSTANT *= int(n)
+                    MONKEY_DIVISOR_CONSTANT *= int(n)    # find GCD, divisors are prime
                     monkey['test'] = int(n)
                 case ['If', 'true:', _, _, _, n]:
                     monkey['test_true'] = int(n)
@@ -52,7 +56,7 @@ def solve(data, iteration, divide=True):
                 if divide:
                     item //= 3
                 else:
-                    item %= MONKEY_DIVISOR_CONSTANT
+                    item %= MONKEY_DIVISOR_CONSTANT    # Apply CRT to reduce computational time and power
 
                 if item % monkey['test'] == 0:
                     data[monkey['test_true']]['items'].append(item)
