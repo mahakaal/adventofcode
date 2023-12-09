@@ -90,11 +90,8 @@ func part1(lines []string, storage *Storage) {
 func part2(wonCards *Storage, lines int) {
 	total := 0
 	for _, card := range wonCards.cards {
-		nextValues := generateNextValues(card.number, card.won+1, lines)
-		for i := 0; i < card.copies; i++ {
-			for _, j := range nextValues {
-				wonCards.cards[j-1].copies++
-			}
+		for j := card.number; j < card.number+card.won+1 && j-1 < lines; j++ {
+			wonCards.cards[j-1].copies += card.copies
 		}
 		total += card.copies
 	}
