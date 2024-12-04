@@ -1,24 +1,22 @@
+from copy import deepcopy
+
 reports = []
 
 with open('puzzle.txt') as f:
     for line in f.read().strip().split('\n'):
         reports.append([int(a) for a in line.split(' ')])
 
-safe_reports = 0
-safe_range = range(1, 4)
-for report in reports:
+def get_safe_reports(row: [int]) -> bool:
     safe = False
     mode = None
-    for i in range(len(report) -1):
-        a, b, diff = report[i], report[i+1], None
+    for i in range(len(row) - 1):
+        a, b, diff = row[i], row[i + 1], None
 
         if mode is None:
-            if a > b and a - b in safe_range:
+            if a > b:
                 mode = 'decrease'
-                continue
-            elif b > a and b - a in safe_range:
+            elif b > a:
                 mode = 'increase'
-                continue
             else:
                 safe = False
                 break
@@ -28,12 +26,19 @@ for report in reports:
         elif mode == 'increase':
             diff = b - a
 
-        if diff not in safe_range:
+        if 1 <= diff <= 3:
+            safe = True
+        else:
             safe = False
             break
 
-        safe = True
+    return safe
 
-    safe_reports += 1 if safe else 0
 
-print(safe_reports)
+print('part 1: ', sum(get_safe_reports(report) for report in reports))
+
+count = 0
+for report in reports:
+    count += get_safe_reports(report) or any(get_safe_reports(report[:i] + report[i+1:]) for i in range(len(report)))
+
+print('part 2: ', count)
