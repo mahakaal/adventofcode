@@ -1,6 +1,6 @@
 import re
 
-with open("puzzle.txt") as f:
+with open("test.txt") as f:
     memory_dump = f.read().strip().split()
 
 pattern = re.compile(r'mul\((\d{1,3}),(\d{1,3})\)')
