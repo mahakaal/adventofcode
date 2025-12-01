@@ -12,7 +12,6 @@ for value in lines:
     passes = 0
     intermediate = counter + value
 
-
     ### check for increment
     ### if positive we need to check how many times we crossed 0 from the previous iteration
     ### -1 ensures we don't double count if we arrive at a 100's multiple
